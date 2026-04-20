@@ -1,96 +1,106 @@
-<svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="background:#0d1117;font-family:system-ui,-apple-system,sans-serif">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M2 1L8 5L2 9" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </marker>
-  </defs>
+# SonicFlow
 
-  <!-- Title -->
-  <text x="450" y="35" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="600">SonicFlow — Data Platform Architecture</text>
+An end-to-end data engineering platform for music streaming analytics. Simulates a Spotify-like service with real ETL pipelines, cloud infrastructure, data quality automation, and interactive dashboards.
 
-  <!-- Row 1: Data Sources -->
-  <text x="50" y="75" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">DATA SOURCES</text>
-  <rect x="40" y="88" width="170" height="70" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-  <text x="125" y="116" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="500">Kaggle Tracks</text>
-  <text x="125" y="136" text-anchor="middle" fill="#8b949e" font-size="11">114K songs, 21 cols</text>
+![Architecture](architecture.svg)
 
-  <rect x="230" y="88" width="170" height="70" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-  <text x="315" y="116" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="500">Event Generator</text>
-  <text x="315" y="136" text-anchor="middle" fill="#8b949e" font-size="11">500K streams, 5K users</text>
+## What this project does
 
-  <!-- Arrow down from sources -->
-  <line x1="220" y1="158" x2="220" y2="195" stroke="#8b949e" stroke-width="1" marker-end="url(#arr)"/>
+Raw streaming data (500K events from 5K users across 89K tracks) flows through a multi-stage pipeline: ingested from source, cleaned and deduplicated, loaded into a star schema warehouse, validated automatically, and served through an analytics dashboard. The platform runs locally with Docker and extends to AWS for cloud-native data lake architecture.
 
-  <!-- Row 2: ETL Pipeline -->
-  <text x="50" y="210" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">ETL PIPELINE</text>
-  <rect x="40" y="222" width="130" height="56" rx="8" fill="#1c2333" stroke="#388bfd" stroke-width="1"/>
-  <text x="105" y="246" text-anchor="middle" fill="#58a6ff" font-size="12" font-weight="500">Extract</text>
-  <text x="105" y="264" text-anchor="middle" fill="#8b949e" font-size="10">profile_data.py</text>
+## Tech stack
 
-  <line x1="170" y1="250" x2="195" y2="250" stroke="#8b949e" stroke-width="1" marker-end="url(#arr)"/>
+**Data processing:** Python, pandas, Apache Spark (PySpark)
 
-  <rect x="200" y="222" width="130" height="56" rx="8" fill="#1c2333" stroke="#388bfd" stroke-width="1"/>
-  <text x="265" y="246" text-anchor="middle" fill="#58a6ff" font-size="12" font-weight="500">Transform</text>
-  <text x="265" y="264" text-anchor="middle" fill="#8b949e" font-size="10">clean_data.py</text>
+**Storage:** PostgreSQL (star schema), AWS S3 (data lake with raw/cleaned/curated zones), Parquet
 
-  <line x1="330" y1="250" x2="355" y2="250" stroke="#8b949e" stroke-width="1" marker-end="url(#arr)"/>
+**AWS services:** S3, Glue Data Catalog, Glue Crawlers, Athena, Lambda, Step Functions
 
-  <rect x="360" y="222" width="130" height="56" rx="8" fill="#1c2333" stroke="#388bfd" stroke-width="1"/>
-  <text x="425" y="246" text-anchor="middle" fill="#58a6ff" font-size="12" font-weight="500">Load</text>
-  <text x="425" y="264" text-anchor="middle" fill="#8b949e" font-size="10">load_to_db.py</text>
+**Data quality:** Custom 20-check validation framework (schema, volume, nulls, freshness, referential integrity, statistical anomalies)
 
-  <!-- Arrow to PostgreSQL -->
-  <line x1="490" y1="250" x2="530" y2="250" stroke="#8b949e" stroke-width="1" marker-end="url(#arr)"/>
+**Visualization:** Metabase
 
-  <!-- PostgreSQL -->
-  <rect x="535" y="212" width="160" height="76" rx="8" fill="#1a2332" stroke="#3fb950" stroke-width="1"/>
-  <text x="615" y="240" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="500">PostgreSQL</text>
-  <text x="615" y="258" text-anchor="middle" fill="#8b949e" font-size="10">Star Schema</text>
-  <text x="615" y="274" text-anchor="middle" fill="#8b949e" font-size="10">fact + 5 dimensions</text>
+**Infrastructure:** Docker, Git
 
-  <!-- Row 3: Processing & Cloud -->
-  <text x="50" y="325" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">PROCESSING</text>
+## Architecture overview
 
-  <!-- Spark -->
-  <rect x="40" y="338" width="190" height="76" rx="8" fill="#2a1f14" stroke="#d29922" stroke-width="1"/>
-  <text x="135" y="362" text-anchor="middle" fill="#e3b341" font-size="13" font-weight="500">Apache Spark</text>
-  <text x="135" y="380" text-anchor="middle" fill="#8b949e" font-size="10">Parquet, partitioning</text>
-  <text x="135" y="396" text-anchor="middle" fill="#8b949e" font-size="10">joins, execution plans</text>
+**Data sources** — Spotify tracks dataset from Kaggle (114K tracks with audio features) combined with synthetically generated streaming events. Events are weighted realistically: popular tracks get more plays, listening peaks in the evening, geographic distribution across 10 countries.
 
-  <!-- AWS -->
-  <text x="270" y="325" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">AWS CLOUD</text>
-  <rect x="260" y="338" width="200" height="76" rx="8" fill="#1f1a2e" stroke="#a371f7" stroke-width="1"/>
-  <text x="360" y="358" text-anchor="middle" fill="#a371f7" font-size="13" font-weight="500">S3 + Glue + Athena</text>
-  <text x="360" y="376" text-anchor="middle" fill="#8b949e" font-size="10">Data lake (raw/clean/curated)</text>
-  <text x="360" y="392" text-anchor="middle" fill="#8b949e" font-size="10">Lambda + Step Functions</text>
+**ETL pipeline** — Python scripts handle extraction, profiling, cleaning (24K duplicate track_ids resolved, multi-artist parsing, null handling), and loading into a PostgreSQL star schema with `fact_streams` at the center connected to `dim_tracks`, `dim_users`, `dim_artists`, `dim_dates`, and `track_genres`.
 
-  <!-- Data Quality -->
-  <text x="500" y="325" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">DATA QUALITY</text>
-  <rect x="490" y="338" width="200" height="76" rx="8" fill="#281c1c" stroke="#f85149" stroke-width="1"/>
-  <text x="590" y="358" text-anchor="middle" fill="#f85149" font-size="13" font-weight="500">Validation Engine</text>
-  <text x="590" y="376" text-anchor="middle" fill="#8b949e" font-size="10">20 automated checks</text>
-  <text x="590" y="392" text-anchor="middle" fill="#8b949e" font-size="10">schema, nulls, integrity</text>
+**Distributed processing** — The pipeline is rebuilt in PySpark to demonstrate distributed data concepts. Includes CSV-to-Parquet conversion (2.3x faster, 2.2x smaller), date-based partitioning (1.8x query speedup via partition pruning), and join optimization (broadcast vs sort-merge strategies analyzed through Spark execution plans).
 
-  <!-- Row 4: Analytics -->
-  <text x="50" y="455" fill="#8b949e" font-size="11" font-weight="500" letter-spacing="1">ANALYTICS</text>
+**Cloud infrastructure** — Three-zone S3 data lake (raw/cleaned/curated) with Glue Data Catalog for metadata management and Glue Crawlers for automated schema discovery. Athena provides serverless SQL queries directly on S3. Lambda functions validate incoming data on upload. Step Functions orchestrate the pipeline with branching logic for success/failure paths.
 
-  <!-- Dashboard -->
-  <rect x="40" y="468" width="200" height="44" rx="8" fill="#122117" stroke="#3fb950" stroke-width="1"/>
-  <text x="140" y="495" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="500">Metabase Dashboard</text>
+**Data quality** — Automated validation framework runs 20 checks covering schema validation, row count bounds, null rate monitoring, data freshness, referential integrity (orphan foreign keys), and statistical anomaly detection (listen duration, skip rate, distribution coefficient of variation). Tested with simulated data corruption to verify detection.
 
-  <!-- Arrow from PostgreSQL to Dashboard -->
-  <line x1="615" y1="288" x2="615" y2="310" stroke="#8b949e" stroke-width="1" stroke-dasharray="4"/>
-  <path d="M615 310 L615 460 L242 460 L242 468" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
+**Analytics** — Metabase dashboard connected to PostgreSQL showing top artists, streams by country, listening patterns by hour of day, and skip rates by device.
 
-  <!-- Arrow from ETL to Spark -->
-  <line x1="135" y1="278" x2="135" y2="338" stroke="#8b949e" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
+## Project structure
 
-  <!-- Arrow from ETL to AWS -->
-  <path d="M425 278 L425 310 L360 310 L360 338" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
+```
+sonicflow/
+├── profile_data.py           # Data profiling and exploration
+├── clean_data.py             # Cleaning, deduplication, star schema creation
+├── generate_events.py        # Realistic streaming event generator
+├── load_to_db.py             # PostgreSQL schema and data loading
+├── test_queries.py           # Analytical queries on star schema
+├── validate_data.py          # 20-check data validation framework
+├── simulate_bad_data.py      # Injects data corruption for testing
+├── fix_bad_data.py           # Restores clean state
+├── spark_learning.ipynb      # PySpark exercises and optimization
+├── dataset.csv               # Raw Kaggle dataset
+├── dim_tracks.csv            # Cleaned tracks dimension
+├── dim_artists.csv           # Cleaned artists dimension
+├── dim_users.csv             # Generated users dimension
+├── fact_streams.csv          # Generated streaming events
+├── track_genres.csv          # Track-to-genre mapping
+├── streams_parquet/          # Parquet format output
+├── streams_partitioned/      # Year/month partitioned output
+└── validation_results.json   # Latest validation report
+```
 
-  <!-- Arrow from PostgreSQL to Validation -->
-  <path d="M695 250 L730 250 L730 376 L692 376" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
+## Quick start
 
-  <!-- Tech labels along bottom -->
-  <text x="450" y="510" text-anchor="middle" fill="#484f58" font-size="10">Python  |  pandas  |  PySpark  |  PostgreSQL  |  AWS (S3, Glue, Athena, Lambda, Step Functions)  |  Docker  |  Metabase</text>
-</svg>
+```bash
+git clone https://github.com/jeena-krishna/sonicflow.git
+cd sonicflow
+
+python3 -m venv venv
+source venv/bin/activate
+pip install pandas psycopg2-binary
+
+# Start PostgreSQL
+docker run --name sonicflow-db \
+  -e POSTGRES_USER=jeena -e POSTGRES_PASSWORD=sonicflow123 \
+  -e POSTGRES_DB=sonicflow -p 5433:5432 -d postgres:16
+
+# Run ETL pipeline
+python3 clean_data.py
+python3 generate_events.py
+python3 load_to_db.py
+
+# Validate data quality
+python3 validate_data.py
+
+# Start dashboard
+docker run --name metabase -p 3000:3000 -d metabase/metabase
+# Connect at http://localhost:3000 → PostgreSQL → host.docker.internal:5433
+```
+
+## Data model
+
+The star schema centers on `fact_streams` (one row per stream event) with dimension tables for context:
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| fact_streams | 500,000 | Stream events with duration, skip, device, timestamp |
+| dim_tracks | 89,740 | Track metadata and audio features |
+| dim_users | 5,000 | User profiles with country, plan, age group |
+| dim_artists | 29,858 | Unique artists extracted from multi-artist tracks |
+| dim_dates | 180 | Date breakdowns for time-based analysis |
+| track_genres | 113,549 | Many-to-many track-genre relationships |
+
+## Dataset
+
+Source: [Spotify Tracks Dataset](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset) from Kaggle. Streaming events are synthetically generated with realistic distributions.
