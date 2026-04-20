@@ -94,3 +94,4 @@
   <!-- Tech labels along bottom -->
   <text x="450" y="510" text-anchor="middle" fill="#484f58" font-size="10">Python  |  pandas  |  PySpark  |  PostgreSQL  |  AWS (S3, Glue, Athena, Lambda, Step Functions)  |  Docker  |  Metabase</text>
 </svg>
+ 
