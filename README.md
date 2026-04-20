@@ -3,6 +3,7 @@
 An end-to-end data engineering platform for music streaming analytics. Simulates a Spotify-like service with real ETL pipelines, cloud infrastructure, data quality automation, and interactive dashboards.
 
 ![Architecture](architecture.svg)
+![Dashboard](dashboard.png)
 
 ## What this project does
 
