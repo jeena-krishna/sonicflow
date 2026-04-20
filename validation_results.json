@@ -1,0 +1,108 @@
+{
+  "run_time": "2026-04-20T13:24:51.397739",
+  "total_checks": 20,
+  "passed": 20,
+  "failed": 0,
+  "results": [
+    {
+      "check": "fact_streams schema",
+      "status": "PASS",
+      "detail": "all columns present"
+    },
+    {
+      "check": "dim_tracks schema",
+      "status": "PASS",
+      "detail": "all columns present"
+    },
+    {
+      "check": "dim_users schema",
+      "status": "PASS",
+      "detail": "all columns present"
+    },
+    {
+      "check": "fact_streams volume",
+      "status": "PASS",
+      "detail": "500000 rows (expected 100000-1000000)"
+    },
+    {
+      "check": "dim_tracks volume",
+      "status": "PASS",
+      "detail": "89740 rows (expected 50000-200000)"
+    },
+    {
+      "check": "dim_users volume",
+      "status": "PASS",
+      "detail": "5000 rows (expected 1000-50000)"
+    },
+    {
+      "check": "fact_streams.stream_id nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "fact_streams.user_id nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "fact_streams.track_id nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "fact_streams.timestamp nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "dim_tracks.track_id nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "dim_tracks.track_name nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "dim_users.user_id nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "dim_users.country nulls",
+      "status": "PASS",
+      "detail": "0 nulls (0.00%)"
+    },
+    {
+      "check": "data freshness",
+      "status": "PASS",
+      "detail": "latest event: 2024-06-28 23:59:00"
+    },
+    {
+      "check": "streams\u2192tracks integrity",
+      "status": "PASS",
+      "detail": "0 orphan track_ids"
+    },
+    {
+      "check": "streams\u2192users integrity",
+      "status": "PASS",
+      "detail": "0 orphan user_ids"
+    },
+    {
+      "check": "avg listen duration",
+      "status": "PASS",
+      "detail": "130 seconds"
+    },
+    {
+      "check": "skip rate",
+      "status": "PASS",
+      "detail": "10.7%"
+    },
+    {
+      "check": "streams per user distribution",
+      "status": "PASS",
+      "detail": "CV=0.101"
+    }
+  ]
+}
